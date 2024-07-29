@@ -1,0 +1,40 @@
+.container2 {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
+
+.left-nav-bar {
+  background-color: #f1f1f1; /* Optional background color */
+  position: fixed; /* Fixed position */
+  top: 0; /* Align to the top */
+  left: 0; /* Align to the left */
+  width: 200px; /* Set a width for your nav bar */
+  height: 100%; /* Full height */
+}
+
+.content {
+  margin-left: 200px; /* Add a left margin equal to the nav bar's width */
+  flex-grow: 1; /* Allows content to grow and take remaining space */
+  padding: 20px;
+}
+
+
+
+
+  
+  .left-nav-bar li {
+    margin-bottom: 10px;
+    list-style: none; /* Remove default bullet points */
+  }
+  
+  .left-nav-bar a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 5px 10px;
+  }
+  
+  .left-nav-bar a:hover {
+    background-color: #e0e0e0;
+  }
+  

@@ -1,0 +1,15 @@
+<div  *ngIf="client; else selectClient">
+    <h2> nom de Client : {{ client.nom }}</h2>
+    <p>Telephone 1: {{ client.tel1 }}</p>
+    <p>Telephone 2: {{ client.tel2 }}</p>
+    <p>Adresse: {{ client.adresse }}</p>
+  </div>
+  
+  <ng-template #selectClient>
+    <h2>Sélectionnez un Client</h2>
+    <select [(ngModel)]="selectedClientId" class="form-control">
+      <option *ngFor="let client of clients" [value]="client.id">{{ client.nom }}</option>
+    </select>
+    <button class="btn btn-primary mt-2" (click)="onSelectClient()">Charger le Client</button>
+  </ng-template>
+  

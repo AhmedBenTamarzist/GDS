@@ -1,0 +1,184 @@
+
+
+<form name="f">
+<div class="card">
+    <div class="card-header"><h5>Facutre d'Achat</h5>
+    
+        <div class="form-group row align-items-center justify-content-center">
+            <div class="col-sm-2">
+              <input type="radio" name="fact"  (click)="showFournisseurDetails(true)" selected>Fournisseur
+            </div>
+            <div class="col-sm-2">
+              <input type="radio" name="fact"  (click)="showFournisseurDetails(false)">Without Fournisseur
+            </div>
+          </div>
+        
+    </div>
+    <div class="card-body">
+        <div class="form-group row align-items-center justify-content-center">
+            
+                <label for="refFacture" *ngIf="factureType" class="col-sm-2 col-form-label">Reference de facture</label>
+                <div *ngIf="factureType" class="col-sm-2 ">
+                    <input [(ngModel)]="refFacture" name="refFacture" class="form-control" id="refFacture"  placeholder="F000000">
+                </div>
+            
+            <label for="dateFacture" class="col-sm-2 col-form-label">date de Facture</label>
+            <div class="col-sm-2">
+                <input [(ngModel)]="dateFacture" name="dateFacture" type="date" class="form-control" id="dateFacture" >
+            </div>
+        </div>
+
+        <br>
+            <div *ngIf="factureType" class="card border-info">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="fournisseur" class="col-sm-2 col-form-label">Fournisseur</label>
+                        <div class="col-sm-2 ">
+                        <input [(ngModel)]="nomFournisseur" name="fournisseur" class="form-control" id="fournisseur" (input)="filterFournisseur($event)" placeholder="Fournisseur">
+                        </div>
+                    
+                        <label for="telFournisseur1" class="col-sm-2 col-form-label">Tel de fournisseur 1</label>
+                        <div class="col-sm-2">
+                        <input [(ngModel)]="telFournisseur1" name="telFournisseur1" type="number" class="form-control" id="telFournisseur1" placeholder="99 999 999">
+                        </div>
+                    
+                        <label for="telFournisseur2" class="col-sm-2 col-form-label">Tel de fournisseur 2</label>
+                        <div class="col-sm-2">
+                        <input [(ngModel)]="telFournisseur2" name="telFournisseur2" type="number" class="form-control" id="telFournisseur2" placeholder="99 999 999">
+                        </div>
+                    
+                    </div>
+                
+                    <hr>
+                    <div class="col-md-6">
+                        <div class="table-container" id="tableOptions">
+                            <table class="table table-hover" *ngIf="filteredFrounisseur && filteredFrounisseur.length > 0">
+                            
+                                <thead>
+                                    <th>Options</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let fournisseur of filteredFrounisseur" (click)="selectFrounisseur(fournisseur)">
+                                        <td>{{ fournisseur.nom }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <br>
+            <div class="card border-danger">
+
+                <div class="card-body">
+                    
+
+                    <div class="row">
+                        <!-- Inputs Section --><h4 >Article</h4>
+                        <div class="col-md-6">
+                            
+                            <div class="form-group">
+                                <label for="article">Nom d'article</label>
+                                <input [(ngModel)]="nomArticle" name="article" class="form-control" id="article" (input)="filterArticles($event)" placeholder="article">
+                            </div>
+
+                            <!-- Prix Input -->
+                            <div class="form-group">
+                                <label for="prix">Prix d'Achat</label>
+                                <input [(ngModel)]="prixArticle" name="prix" class="form-control" id="prix" type="number" placeholder="Enter prix">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="marqueArticle">Marque</label>
+                                <input [(ngModel)]="marqueArticle" name="marqueArticle" class="form-control" id="marqueArticle" type="text" (input)="filterArticles($event)" placeholder="Enter la marque">
+                            </div>
+                            
+                            
+                        </div>
+
+                        <!-- Table Section -->
+                        <div class="col-md-6">
+                            
+                            <div class="form-group">
+                                <label for="qte">Quantity</label>
+                                <input [(ngModel)]="qteArticle" name="qte" class="form-control" id="qte" type="number" placeholder="Enter quantity">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prixVente">Prix de Vente</label>
+                                <input [(ngModel)]="prixVenteArticle" name="prixVente" class="form-control" id="prixVente" type="number" placeholder="Enter prix de Vente">
+                            </div>
+                            <div class="form-group">
+                                <label for="descArticle">Description</label>
+                                <input [(ngModel)]="descArticle" name="descArticle" class="form-control" id="descArticle" type="text" placeholder="description">
+                            </div>
+                        </div>
+
+                        
+
+                        <div>
+                            <hr>
+                            <h4 >Options :</h4>
+                            <div class="table-container" id="tableOptions">
+                                <table class="table table-hover" *ngIf="filteredAritcles && filteredAritcles.length > 0">
+                                    <thead>
+                                        <th>Options</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let article of filteredAritcles" (click)="selectArticle(article)">
+                                            <td>{{ article.nom }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Button -->
+                    <button type="button" class="btn btn-primary mt-3" id="addButton" (click)="ajouterArticle()">Ajouter</button>
+                </div>
+            </div>
+        
+            
+    <div class="container mt-4">
+        <h2>Les Articles </h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    
+                    <th>Article</th>
+                    <th>Marque</th>
+                    <th>Quantite</th>
+                    <th>Prix d achat</th>
+                    <th>Prix de vente</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let i of articles ;let index=index">
+                <tr>
+                    <td>{{index}}</td>
+                    
+                    <td>{{i.nom}}</td>
+                    <td>{{i.marque}}</td>
+                    <td><input type="number" name="quantite" [(ngModel)]="i.quantite" [value]="i.quantite" class="form-control"></td>
+                    <td>{{i.prix_achat}}</td>
+                    <td>{{i.prix}}</td>
+                    <td>{{i.description}}</td>
+                    <td>
+                        <button class="btn btn-danger" (click)="deleteProduct(index)">Delete</button>
+                    </td>
+
+                </tr>
+                
+            </tbody>
+            
+        </table>
+    </div>
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-success btn-block" id="subButton" (click)="onSubmit()">Submit</button>
+    </div>
+    </div>
+</div>
+</form>

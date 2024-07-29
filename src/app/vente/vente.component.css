@@ -1,0 +1,4 @@
+table {
+    max-height: 50px; /* Adjust height as needed to display 4-5 rows */
+    overflow-y: auto;
+  }
