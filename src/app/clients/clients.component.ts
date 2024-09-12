@@ -20,8 +20,9 @@ export class ClientsComponent {
   telClient1: string = '';
   telClient2: string = '';
   adrClient: string = '';
+  cinClient: string = '';
+  tvaClient: string = '';
   
-  dtOptions: any = {}
 
   constructor(private router: Router,private sharedService : SharedService) { }
 
@@ -30,11 +31,7 @@ export class ClientsComponent {
       this.clients = data;
     });
 
-    this.dtOptions = {
-      paging: true, // Enable pagination
-      ordering: true, // Enable sorting
-      // Add other options as needed (refer to documentation)
-    };
+    
   }
 
   toggleCard() {
@@ -48,6 +45,7 @@ export class ClientsComponent {
   this.router.navigate(['/client-info', clientId]);
   }
 
+  
   confirmAddClient() {
     const isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce client?");
     if (isConfirmed) {
@@ -62,7 +60,9 @@ export class ClientsComponent {
       nom: this.nameClient,
       tel1: this.telClient1,
       tel2: this.telClient2,
-      adresse: this.adrClient
+      adresse: this.adrClient,
+      cin:this.cinClient,
+      code_tva:this.tvaClient
     };
 
     this.sharedService.addClient(newClient).subscribe(
@@ -78,6 +78,8 @@ export class ClientsComponent {
         this.telClient1 = '';
         this.telClient2 = '';
         this.adrClient = '';
+        this.cinClient='';
+        this.tvaClient='';
       },
       error => {
         console.error("Erreur lors de l'ajout du client", error);

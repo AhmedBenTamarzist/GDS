@@ -1,27 +1,77 @@
 import { Component } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
+import { SharedService } from '../shared.service';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-retour',
   standalone: true,
   imports: [SharedModule],
   templateUrl: './retour.component.html',
-  styleUrl: './retour.component.css'
+  styleUrl: './retour.component.css',
+  providers: [DatePipe]
+
 })
 export class RetourComponent {
 
-  refFacture:String | undefined;
+  refFacture:string | undefined;
   facture:any;
-  refFactureOptions: string[] = ['F000001', 'F000002', 'F000003', 'F000004', 'F000005'];
   filteredFactures:any;
   returnedQte:number[] =[];
-  selectedFacture:any;
+  selectedFacture:any=null;
 
-  filterFactures(event: any) {
+
+  constructor(private sharedService :SharedService,private datePipe: DatePipe){
+
+  }
+
+
+ 
+  isLoading =false;
+  filterFactures() 
+  {
+    
+    if(this.refFacture){
+      this.isLoading=true;
+      this.sharedService.getFactureAndBLbyRef(this.refFacture).subscribe(
+      (data:any[])=>{
+        this.filteredFactures=data.map(facture => {
+          facture.date = this.datePipe.transform(facture.date, 'd, MM, y, h:mm a');
+          return facture;
+        });
+        console.log(data);
+        this.isLoading=false;
+      },
+      (error)=> {
+        this.isLoading=false;
+        console.error("error Loading factures and bls",error)}
+    );
+      
+  }
     
   }
-  selectFacture(facture:any){
 
+
+  selectFacture(facture:any){
+    this.selectedFacture=facture
+    if(facture.type=="facture"){
+      this.sharedService.getArticlesByRefFacture(facture.ref).subscribe((data:any[])=>
+      {
+        this.selectedFacture.articles=data;
+      },
+        (error)=>{console.error("Error loading articles",error)}
+      );
+    }else if(facture.type=="bl"){
+      //type : bl
+      this.sharedService.getArticlesByRefBonDeLivraison(facture.ref).subscribe((data:any[])=>
+        {
+          this.selectedFacture.articles=data;
+        },
+          (error)=>{console.error("Error loading articles",error)}
+        );
+
+    }
   }
 
   

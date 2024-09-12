@@ -1,0 +1,156 @@
+
+<div class="card"> 
+    <div class="card-body">
+        <div>
+            <div class="form-group">
+                <label for="nameClient">Client</label>
+                
+                <input [(ngModel)]="nameclient" name="nameClient" id="nameClient" class="form-control" placeholder="Enter nom de client ou id ">
+                <button class="btn btn-primary mt-2" (click)="onRechercher()">Rechercher</button>
+                <div class="text-success" *ngIf="clientSelected"> Client selected ({{clientSelected.nom}})</div>
+            </div>
+            <hr>
+            <div>
+                <h3>Options :</h3>
+                <div class="table-container" id="tableOptions">
+                    <table class="table table-hover" *ngIf="clients.length >0">
+                    <thead>
+                        <tr>
+                        <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let client of clients" (click)="selectClient(client)">
+                        <td>{{ client.nom }}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="form-group row align-items-center justify-content-center">
+    Choisir : 
+    <div class="col-sm-4">
+        <label for="bl">Bon de livraison</label>
+        <input type="checkbox" id="bl" [(ngModel)]="isBonDeLivraison">
+    </div>
+    <div class="col-sm-2">
+        <label for="fact">Facture</label>
+        <input type="checkbox" id="fact" [(ngModel)]="isFacture">
+    </div>
+    
+</div>
+    <br>
+        <div class="row align-items-center justify-content-center">
+            
+            <label for="dateDebut" class="col-sm-2 col-form-label">Date debut :</label>
+            <div class="col-sm-3">
+                <input type="date"[(ngModel)]="dateDebut" id="dateDebut" class="form-control">
+            </div>
+            <label for="dateFin" class="col-sm-2 col-form-label">Date Fin:</label>
+            <div class="col-sm-3">
+                <input type="date"[(ngModel)]="dateFin" id="dateFin" class="form-control">
+            </div>
+        </div>
+        <div class="row align-items-center justify-content-center">
+            <button class="btn btn-success mt-4" (click)="chargerDevis()">charger</button>
+            <p class="text-warning">{{messageError}}</p>
+        </div>
+
+
+
+
+
+        <div class="card border-danger" *ngIf="devis">
+            <div class="card-body">
+                <div class="card border-info">
+                    <div class="card-header center">
+                        <h5>Devis</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>Informations sur le Client ID {{devis.client.id}}</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                            
+                                <p><strong>Nom :</strong> {{devis.client.nom}}</p>
+                                <p><strong>Téléphone Principal :</strong> {{devis.client.tel1}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Adresse :</strong> {{devis.client.adresse}}</p>
+                                <p><strong>Téléphone Secondaire :</strong> {{devis.client.tel2}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>TVA :</strong> {{devis.client.tva}}</p>
+                                <p><strong>Date debut :</strong> {{devis.dateDebut}}</p>
+                                
+                            </div>
+                        
+                            <div class="col-md-6">
+                                <p><strong>CIN :</strong> {{devis.client.cin}}</p>
+                                <p><strong>Date fin :</strong> {{devis.dateFin}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            
+             
+            
+
+                <div class="container mt-4">
+                    <h2>Les Articles </h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                
+                                <th>Quantite</th>
+                                <th>Article</th>
+                                <th>Prix UHT</th>
+                                <th>TVA</th>
+                                <th>Prix UTTC</th>
+                                
+                                <th>Remise</th>
+                                
+                                <th>Prix Vente</th>
+
+                                <th>Total</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let i of devis.articles ;let index=index">
+                            <tr>
+
+                                
+                                <td>{{i.total_quantite}}</td>
+                                <td>{{i.nom}}</td>
+                                <td>{{i.prix_vente_ht}}</td>
+                                <td>{{i.tva}}</td>
+                                <td>{{i.prix_vente_ttc}}</td>
+                                
+                                <td>{{i.remise}}</td>
+                                
+                                <td>{{i.prix_vente}}</td>
+
+                                <td>{{i.prix_vente*i.total_quantite}}</td>
+                                
+                                
+                            </tr>
+                            
+                        </tbody>
+                        
+                    </table>
+                </div>
+                
+                
+
+                
+                  
+            </div>
+        </div>
+
+
+       
+    

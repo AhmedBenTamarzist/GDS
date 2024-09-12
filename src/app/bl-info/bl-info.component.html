@@ -1,0 +1,56 @@
+<div *ngIf="BL; else selectBL" class="BL-info">
+    <h2>BL Details</h2>
+  
+    <div >
+      <p><strong>ID:</strong> {{ BL.id }}</p>
+      <p><strong>Reference:</strong> {{ BL.ref }}</p>
+      <p><strong>Date:</strong> {{ BL.date | date: 'yyyy-MM-dd HH:mm' }}</p>
+
+      <p><strong>Client ID:</strong> {{ BL.id_client }}</p>
+    </div>
+  
+    <div *ngIf="articlesBL && articlesBL.length > 0">
+      <h3>Articles in BL</h3>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Prix U.H.T.</th>
+            <th>Article </th>
+            <th>Prix U.T.T.C.</th>
+            <th>Remise</th>
+            <th>Quantite</th>
+            <th>Prix avec remise</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let article of articlesBL">
+            <td>{{ article.prix_vente_ht }}</td>
+            <td>{{ article.nom }}</td>
+            <td>{{ article.prix_vente_ttc }}</td>
+            <td>{{ article.remise }}</td>
+            <td>{{ article.quantite }}</td>
+            <td>{{ article.prix_vente  }}</td>
+            <td>{{ (article.prix_vente * article.quantite)  }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+            <tr><th colspan="4"></th><th>Total de BL :</th> <th colspan="2"> {{BL.prix_total}}</th></tr>
+        </tfoot>
+      </table>
+    </div>
+  
+    <div *ngIf="!BL">
+      <p>No BL selected. Please select a BL to view its details.</p>
+    </div>
+  </div>
+
+
+  <ng-template #selectBL>
+    <h2>Sélectionnez une BL par référence</h2>
+    <select [(ngModel)]="selectedBL" class="form-control">
+      <option *ngFor="let BL of BLs" [ngValue]="BL">{{ BL.ref }}</option>
+    </select>
+    <button class="btn btn-primary mt-2" (click)="onSelectBL()">Charger la BL</button>
+  </ng-template>
+  

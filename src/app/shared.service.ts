@@ -20,6 +20,24 @@ export class SharedService {
   getClients(): Observable<any[]> {
     return this.http.get<any[]>(this.clientsUrl);
   }
+  rechercherClients(client:string):Observable<any[]>{
+    return this.http.get<any[]>(`${this.clientsUrl}/recherche/${client}`);
+  }
+
+  getDevis(id: string, dateDebut: Date | null, dateFin: Date | null, facture: boolean, bl: boolean): Observable<any[]> {
+    let body;
+    
+     body = {
+      dateDebut: dateDebut, 
+      dateFin: dateFin,
+      facture: facture,
+      bl: bl
+    };
+    
+  
+    return this.http.post<any[]>(`${this.clientsUrl}/devis/${id}`, body);
+  }
+  
 
   getClientById(id: string): Observable<any> {
     return this.http.get<any>(`${this.clientsUrl}/${id}`);
@@ -76,7 +94,7 @@ export class SharedService {
   }
 
   addFacture(facture: any): Observable<any> {
-    return this.http.post<any>(this.facturesUrl, facture);
+    return this.http.post<any>(`${this.facturesUrl}/addFacture`, facture);
   }
 
   updateFacture(id: string, facture: any): Observable<any> {
@@ -85,6 +103,11 @@ export class SharedService {
 
   deleteFacture(id: string): Observable<any> {
     return this.http.delete<any>(`${this.facturesUrl}/${id}`);
+  }
+
+  // Function to get factures by client_id
+  getFacturesByClientId(client_id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.facturesUrl}/client/${client_id}`);
   }
 
   // Bons de Livraison
@@ -97,7 +120,7 @@ export class SharedService {
   }
 
   addBonLivraison(bonLivraison: any): Observable<any> {
-    return this.http.post<any>(this.bonsLivraisonUrl, bonLivraison);
+    return this.http.post<any>(`${this.bonsLivraisonUrl}/addBL`, bonLivraison);
   }
 
   updateBonLivraison(id: string, bonLivraison: any): Observable<any> {
@@ -108,6 +131,10 @@ export class SharedService {
     return this.http.delete<any>(`${this.bonsLivraisonUrl}/${id}`);
   }
 
+  // Function to get bons_de_livraison by client_id
+  getBonsDeLivraisonByClientId(client_id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.bonsLivraisonUrl}/client/${client_id}`);
+  }
 
   //articles_vendu
   // Create a new article vendu
@@ -145,4 +172,7 @@ export class SharedService {
     return this.http.get<any[]>(`${this.articlesVenduUrl}/bon_de_livraison/${ref_bon_de_livraison}`);
   }
 
+  getFactureAndBLbyRef(ref:string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.facturesUrl}/searchFactBl/${ref}`);
+  }
 }

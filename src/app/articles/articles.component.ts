@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { SharedService } from '../shared.service';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-articles',
   standalone: true,
-  imports: [],
+  imports: [SharedModule],
   templateUrl: './articles.component.html',
   styleUrl: './articles.component.css'
 })
@@ -14,13 +15,13 @@ export class ArticlesComponent {
   allAritcles:any[] =[];
   
   constructor(private sharedService : SharedService) {
-    // Initialize dateFacture with today's date
+  
   }
 
   ngOnInit(): void {
 
     this.loadArticles();
-
+    
   }
 
   loadArticles()
@@ -28,6 +29,7 @@ export class ArticlesComponent {
     this.sharedService.getArticles().subscribe((data: any[]) => {
       this.allAritcles = data;
       console.log(this.allAritcles);
+      this.filteredAritcles=this.allAritcles;
     });
   }
 }

@@ -1,0 +1,13 @@
+.form-row {
+    display: flex;
+    gap: 1rem; /* Adjust the space between the fields as needed */
+  }
+  
+  .form-group {
+    flex: 1; /* Allows the form groups to take equal space */
+  }
+  
+  .form-control {
+    width: 100%; /* Ensures the input fields take the full width of their container */
+  }
+  

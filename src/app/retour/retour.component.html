@@ -9,8 +9,16 @@
                 <label for="refFacture" class="col-sm-2 col-form-label">Reference de facture</label>
                 
                 <div class="col-sm-2 ">   
-                    <input [(ngModel)]="refFacture" name="refFacture" class="form-control" id="refFacture" (input)="filterFactures($event)" placeholder="Facture">
-                </div> 
+                    <input [(ngModel)]="refFacture" name="refFacture" class="form-control" id="refFacture"  placeholder="Facture" required>
+                </div>
+                <div class="col-sm-2 ">  
+                <button class="btn btn-primary "[disabled]="isLoading" (click)="filterFactures()">Chercher</button>
+                </div>
+                
+                <div *ngIf="isLoading">
+                    <p>Recherche en cours... Veuillez patienter.</p>
+                    <!-- You can add a spinner here -->
+                </div>
             </div>
             
     
@@ -23,19 +31,21 @@
                                 <table class="table table-hover" >
                                 
                                     <thead>
-                                        <th>Les factures</th>
+                                        <tr>
+                                        <th>Reference</th>
+                                        <th>date</th>
+                                        <th>Client</th>
+                                        <th>Total</th>
+                                    </tr>
                                     </thead>
-                                    <hr>
+                                    
                                     <tbody>
                                         <tr *ngFor="let facture of filteredFactures" (click)="selectFacture(facture)">
                                             <td>{{ facture.ref }}</td>
                                             <td>{{ facture.date }}</td>
-                                            <td>{{ facture.client }}</td>
+                                            <td>{{ facture.client_nom }}</td>
                                             <td>
-                                                <tr *ngFor="let article of facture.articles" >
-                                                    <td>{{ article.nom }}</td>
-                                                    <td>{{ facture.ref }}</td>
-                                                </tr>
+                                                {{ facture.prix_total }}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -50,7 +60,7 @@
                 
            
                 <!--*ngIf="selectedFacture"-->
-            <div class="card border-danger" >
+            <div class="card border-danger" *ngIf="selectedFacture">
                 <div class="card-body">
                     <div class="card border-info">
                         <div class="card-header">
@@ -61,12 +71,12 @@
                             <div class="row">
                                 <div class="col-md-6">
                                 
-                                    <p><strong>Nom :</strong> {{selectedFacture.client.nom}}</p>
-                                    <p><strong>Téléphone Principal :</strong> {{selectedFacture.client.tel1}}</p>
+                                    <p><strong>Nom :</strong> {{selectedFacture.client_nom}}</p>
+                                    <p><strong>Téléphone Principal :</strong> {{selectedFacture.client_tel1}}</p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>Adresse :</strong> {{selectedFacture.client.adresse}}</p>
-                                    <p><strong>Téléphone Secondaire :</strong> {{selectedFacture.client.tel2}}</p>
+                                    <p><strong>Adresse :</strong> {{selectedFacture.client_adresse}}</p>
+                                    <p><strong>Téléphone Secondaire :</strong> {{selectedFacture.client_tel2}}</p>
                                 </div>
                             </div>
 
@@ -74,7 +84,7 @@
                             
                             
                             <h6>Date de la Facture : </h6>
-                            <p>{{facture.date}} 25</p>
+                            <p>{{selectedFacture.date}} </p>
                         </div>
                     </div>
                 
@@ -90,18 +100,22 @@
                                     <th>#</th>
                                     
                                     <th>Article</th>
+                                    <th>Prix UTTC</th>
+                                    <th>Remise</th>
                                     <th>Quantite</th>
                                     <th>Prix unitaire</th>
                                     <th>Retour</th>
                                 </tr>
                             </thead>
-                            <tbody *ngFor="let i of facture.articles ;let index=index">
+                            <tbody *ngFor="let i of selectedFacture.articles ;let index=index">
                                 <tr>
 
                                     <td>{{index}}</td>
-                                    <td>{{i.name}}</td>
-                                    <td>{{i.qte}}</td>
-                                    <td>{{i.prix}}</td>
+                                    <td>{{i.nom}}</td>
+                                    <td>{{i.prix_vente_ttc}}</td>
+                                    <td>{{i.remise}}</td>
+                                    <td>{{i.quantite}}</td>
+                                    <td>{{i.prix_vente}}</td>
                                     
                                     <td>
                                         <input type="number" [id]="'quantityInput' + index" name="quantityInput" min="0" [max]="i.qte" [(ngModel)]="returnedQte[index]" >

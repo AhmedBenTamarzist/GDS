@@ -1,0 +1,29 @@
+<div>
+    <h2>factures</h2>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Reference</th>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Somme Total</th>
+          
+            <th colspan="3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let facture of filteredFactures">
+          <td>{{ facture.id }}</td>
+          <td>{{ facture.ref }}</td>
+          <td>{{ facture.date }}</td>
+          <td>{{ facture.nom }}</td>
+          <td>{{ facture.prix_total }}</td>   
+          <td>
+            <button class="btn btn-info" (click)="viewDetail(facture.id,facture.ref)">Voir les Details</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

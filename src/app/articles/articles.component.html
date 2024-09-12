@@ -1,1 +1,40 @@
-<p>articles works!</p>
+
+<div>
+    <h2>Articles</h2>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Article</th>
+          <th>Description</th>
+                    <th>Marque</th>
+                    <th>Quantite</th>
+                    <th>Prix d achat ht</th>
+                    <th>TVA</th>
+                    <th>Prix de vente ht</th>
+                    <th>Prix de vente ttc</th>
+                    <th>max_remise</th>
+                    
+            <th colspan="3">Actions</th>
+          <!-- Add other columns as necessary -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let article of filteredAritcles">
+          <td>{{ article.id }}</td>
+          <td>{{ article.nom }}</td>
+          <td>{{ article.description }}</td>
+          <td>{{ article.marque }}</td>
+          <td>{{article.quantite}}</td>
+          <td>{{article.prix_achat_ht}}</td>
+                    <td>{{article.tva}}</td>
+                    <td>{{article.prix_vente_ht}}</td>
+                    <td>{{article.prix_vente_ttc}}</td>
+                    <td>{{article.max_remise}} %</td>
+                    
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

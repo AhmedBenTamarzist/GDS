@@ -11,25 +11,26 @@
             <div class="col-sm-2">
               <input type="radio" name="fact"  (click)="showFournisseurDetails(false)">Without Fournisseur
             </div>
-          </div>
+        </div>
         
     </div>
-    <div class="card-body">
-        <div class="form-group row align-items-center justify-content-center">
+    <div class="card-body" *ngIf="factureType==true || factureType==false" >
+        <div class="form-group row align-items-center justify-content-center" >
             
-                <label for="refFacture" *ngIf="factureType" class="col-sm-2 col-form-label">Reference de facture</label>
-                <div *ngIf="factureType" class="col-sm-2 ">
+            <label for="refFacture" *ngIf="factureType==true" class="col-sm-2 col-form-label">Reference de facture</label>
+                <div *ngIf="factureType==true" class="col-sm-2 ">
                     <input [(ngModel)]="refFacture" name="refFacture" class="form-control" id="refFacture"  placeholder="F000000">
                 </div>
             
             <label for="dateFacture" class="col-sm-2 col-form-label">date de Facture</label>
-            <div class="col-sm-2">
-                <input [(ngModel)]="dateFacture" name="dateFacture" type="date" class="form-control" id="dateFacture" >
-            </div>
+                <div class="col-sm-2">
+                    <input [(ngModel)]="dateFacture" name="dateFacture" type="date" class="form-control" id="dateFacture" >
+                </div>
+
         </div>
 
         <br>
-            <div *ngIf="factureType" class="card border-info">
+            <div *ngIf="factureType==true" class="card border-info">
                 <div class="card-body">
                     <div class="form-group row">
                         <label for="fournisseur" class="col-sm-2 col-form-label">Fournisseur</label>
@@ -82,16 +83,19 @@
                                 <input [(ngModel)]="nomArticle" name="article" class="form-control" id="article" (input)="filterArticles($event)" placeholder="article">
                             </div>
 
-                            <!-- Prix Input -->
-                            <div class="form-group">
-                                <label for="prix">Prix d'Achat</label>
-                                <input [(ngModel)]="prixArticle" name="prix" class="form-control" id="prix" type="number" placeholder="Enter prix">
-                            </div>
-
                             <div class="form-group">
                                 <label for="marqueArticle">Marque</label>
                                 <input [(ngModel)]="marqueArticle" name="marqueArticle" class="form-control" id="marqueArticle" type="text" (input)="filterArticles($event)" placeholder="Enter la marque">
                             </div>
+                            <!-- Prix Input -->
+                            <div class="form-group">
+                                <label for="prix">Prix Unitaire d'Achat H.T. </label>
+                                <input [(ngModel)]="prixAchatArticleHT" name="prix" class="form-control" id="prix" type="number" placeholder="Enter prix d'Achat H.T.">
+                            </div>
+
+                            
+
+                            
                             
                             
                         </div>
@@ -105,17 +109,44 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="prixVente">Prix de Vente</label>
-                                <input [(ngModel)]="prixVenteArticle" name="prixVente" class="form-control" id="prixVente" type="number" placeholder="Enter prix de Vente">
-                            </div>
-                            <div class="form-group">
                                 <label for="descArticle">Description</label>
                                 <input [(ngModel)]="descArticle" name="descArticle" class="form-control" id="descArticle" type="text" placeholder="description">
                             </div>
+
+                            <div class="form-group">
+                                <label for="TVA">T.V.A</label>
+                                <input [(ngModel)]="TVA" name="TVA" class="form-control" id="TVA" type="number" placeholder="Enter le % T.V.A">
+                            </div>
+
+                            
+                            
                         </div>
-
-                        
-
+                    
+                        <div>
+                            <p> Prix U.T.T.C d'achat : {{prixAchatTVA()}} </p>
+                            <br>
+                            
+                            <hr>
+                            <div class="form-row">
+                                <div  class="form-group">
+                                    <label for="PourDevente"> Pourcentage de vente : </label>
+                                    <input [(ngModel)]="pourcentagedeVente" name="PourDevente" class="form-control" id="PourDevente" type="number" placeholder="Exemple : 30" (input)="calculerPrixVente()">
+                                </div>
+                                <div  class="form-group">
+                                    <label for="PourDeRemise"> Max Pourcentage de remise : </label>
+                                    <input [(ngModel)]="maxPourcentagedeRemise" name="PourDeRemise" class="form-control" id="PourDeRemise" type="number" placeholder="Exemple : 10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="prixVenteHT">Prix Unitaire de Vente H.T.</label>
+                                <input [(ngModel)]="prixVenteArticleHT" name="prixVenteHT" class="form-control" id="prixVenteHT" type="number" placeholder="Enter prix de Vente H.T.">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="prixVenteTTC">Prix Unitaire de Vente T.T.C</label>
+                                <input [(ngModel)]="prixVenteArticleTTC" name="prixVenteTTC" class="form-control" id="prixVenteTTC" type="number" placeholder="Enter prix de Vente T.T.C">
+                            </div>
+                    </div>
                         <div>
                             <hr>
                             <h4 >Options :</h4>
@@ -150,8 +181,11 @@
                     <th>Article</th>
                     <th>Marque</th>
                     <th>Quantite</th>
-                    <th>Prix d achat</th>
-                    <th>Prix de vente</th>
+                    <th>Prix d achat ht</th>
+                    <th>TVA</th>
+                    <th>Prix de vente ht</th>
+                    <th>Prix de vente ttc</th>
+                    <th>max_remise</th>
                     <th>Description</th>
                     <th>Actions</th>
                 </tr>
@@ -163,8 +197,11 @@
                     <td>{{i.nom}}</td>
                     <td>{{i.marque}}</td>
                     <td><input type="number" name="quantite" [(ngModel)]="i.quantite" [value]="i.quantite" class="form-control"></td>
-                    <td>{{i.prix_achat}}</td>
-                    <td>{{i.prix}}</td>
+                    <td>{{i.prix_achat_ht}}</td>
+                    <td>{{i.tva}}</td>
+                    <td>{{i.prix_vente_ht}}</td>
+                    <td>{{i.prix_vente_ttc}}</td>
+                    <td>{{i.max_remise}} %</td>
                     <td>{{i.description}}</td>
                     <td>
                         <button class="btn btn-danger" (click)="deleteProduct(index)">Delete</button>

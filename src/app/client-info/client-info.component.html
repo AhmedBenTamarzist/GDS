@@ -1,9 +1,59 @@
-<div  *ngIf="client; else selectClient">
-    <h2> nom de Client : {{ client.nom }}</h2>
-    <p>Telephone 1: {{ client.tel1 }}</p>
-    <p>Telephone 2: {{ client.tel2 }}</p>
-    <p>Adresse: {{ client.adresse }}</p>
+<div *ngIf="client; else selectClient">
+  <h2>Nom de Client: {{ client.nom }}</h2>
+  <p>Telephone 1: {{ client.tel1 }}</p>
+  <p>Telephone 2: {{ client.tel2 }}</p>
+  <p>Adresse: {{ client.adresse }}</p>
+
+  <div>
+    <h2>Bons de Livraison</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Référence</th>
+          <th>Date</th>
+          <th>Prix Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bon of clientbonsDeLivraison">
+          <td>{{ bon.ref }}</td>
+          <td>{{ bon.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+          <td>{{ bon.prix_total }}</td>
+          <td>
+            <button class="btn btn-info" (click)="viewDetailBL(bon.id,bon.ref)">Voir les Details</button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+
+  <div>
+    <h2>Factures</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Référence</th>
+          <th>Date</th>
+          <th>Prix Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let facture of clientFacture">
+          <td>{{ facture.ref }}</td>
+          <td>{{ facture.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+          <td>{{ facture.prix_total }}</td>
+          <td>
+            <button class="btn btn-info" (click)="viewDetailFACT(facture.id,facture.ref)">Voir les Details</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
   
   <ng-template #selectClient>
     <h2>Sélectionnez un Client</h2>

@@ -13,7 +13,14 @@
         <label for="nameClient">Nom Client</label>
         <input [(ngModel)]="nameClient" name="nameClient" id="nameClient" class="form-control" placeholder="Enter client name" required>
       </div>
-
+      <div class="form-group">
+        <label for="cinClient">CIN Client</label>
+        <input [(ngModel)]="cinClient" name="cinClient" id="cinClient" class="form-control" placeholder="Enter CIN de client" required>
+      </div>
+      <div class="form-group">
+        <label for="tvaClient">Code TVA Client</label>
+        <input [(ngModel)]="tvaClient" name="tvaClient" id="tvaClient" class="form-control" placeholder="Enter Code TVA de client" required>
+      </div>
       <div class="form-group">
         <label for="telClient1">Tel de client</label>
         <input [(ngModel)]="telClient1" name="tel1" type="number" class="form-control" id="telClient1" placeholder="11 111 111">
@@ -24,8 +31,9 @@
       </div>
       <div class="form-group">
         <label for="adrClient">Adresse Client</label>
-        <input [(ngModel)]="adrClient" name="adr" type="number" class="form-control" id="adrClient" placeholder="15 rue selem chhidi">
+        <input [(ngModel)]="adrClient" name="adr" type="text" class="form-control" id="adrClient" placeholder="15 rue selem chhidi">
       </div>
+      <br>
       <button class="btn btn-primary" (click)="confirmAddClient()">Ajouter</button>
 
     </div>
@@ -34,11 +42,13 @@
 
 <div class="card">
   <div class="card-body">
-    <table class="table table-bordered" datatable [dtOptions]="dtOptions">
+    <table class="table table-bordered" >
       <thead>
         <tr>
           <th>ID</th>
           <th>Nom</th>
+          <th>CIN</th>
+          <th>Code TVA</th>
           <th>adresse</th>
           <th>Telephone 1</th>
           <th>Telephone 2</th>
@@ -49,6 +59,8 @@
         <tr *ngFor="let client of clients; let i = index">
           <td>{{ client.id }}</td>
           <td>{{ client.nom }}</td>
+          <td>{{ client.cin }}</td>
+          <td>{{ client.code_tva }}</td>
           <td>{{ client.adresse }}</td>
           <td>{{ client.tel1 }}</td>
           <td>{{ client.tel2 }}</td>

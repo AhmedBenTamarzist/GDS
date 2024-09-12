@@ -1,4 +1,28 @@
-table {
-    max-height: 50px; /* Adjust height as needed to display 4-5 rows */
+.table-container {
+  max-height: 300px; /* Adjust height to fit 6 rows */
+  overflow-y: auto;
+}
+
+.table-container table thead th, 
+.table-container table tbody td {
+    position: sticky;
+    top: 0;
+    background-color: white; /* Keep headers visible when scrolling */
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container table tbody {
+    display: block;
     overflow-y: auto;
-  }
+}
+
+.table-container table thead, 
+.table-container table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}

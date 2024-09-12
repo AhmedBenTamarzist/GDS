@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
-import { NavbarComponent } from '../navbar/navbar.component'; // Adjust path as per your project structure
-import {DataTablesModule} from 'angular-datatables';
+import { formatDate } from '@angular/common';
+
 @NgModule({
   declarations: [
     
@@ -14,7 +14,7 @@ import {DataTablesModule} from 'angular-datatables';
     FormsModule,
     RouterModule,
     HttpClientModule,
-    DataTablesModule
+    
     
   ],
   exports: [
@@ -22,7 +22,7 @@ import {DataTablesModule} from 'angular-datatables';
     FormsModule,
     RouterModule,
     HttpClientModule,
-    DataTablesModule,
+    
     
   ],providers: [
     provideHttpClient(withFetch())

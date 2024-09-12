@@ -1,0 +1,56 @@
+<div *ngIf="Facture; else selectFacture" class="facture-info">
+    <h2>Facture Details</h2>
+  
+    <div >
+      <p><strong>ID:</strong> {{ Facture.id }}</p>
+      <p><strong>Reference:</strong> {{ Facture.ref }}</p>
+      <p><strong>Date:</strong> {{ Facture.date | date: 'yyyy-MM-dd HH:mm' }}</p>
+
+      <p><strong>Client ID:</strong> {{ Facture.id_client }}</p>
+    </div>
+  
+    <div *ngIf="articlesFacture && articlesFacture.length > 0">
+      <h3>Articles in Facture</h3>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Prix U.H.T.</th>
+            <th>Article </th>
+            <th>Prix U.T.T.C.</th>
+            <th>Remise</th>
+            <th>Quantite</th>
+            <th>Prix avec remise</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let article of articlesFacture">
+            <td>{{ article.prix_vente_ht }}</td>
+            <td>{{ article.nom }}</td>
+            <td>{{ article.prix_vente_ttc }}</td>
+            <td>{{ article.remise }}</td>
+            <td>{{ article.quantite }}</td>
+            <td>{{ article.prix_vente  }}</td>
+            <td>{{ (article.prix_vente * article.quantite)  }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+            <tr><th colspan="4"></th><th>Total de Facture :</th> <th colspan="2"> {{Facture.prix_total}}</th></tr>
+        </tfoot>
+      </table>
+    </div>
+  
+    <div *ngIf="!Facture">
+      <p>No facture selected. Please select a facture to view its details.</p>
+    </div>
+  </div>
+
+
+  <ng-template #selectFacture>
+    <h2>Sélectionnez une Facture par référence</h2>
+    <select [(ngModel)]="selectedFacture" class="form-control">
+      <option *ngFor="let facture of Factures" [ngValue]="facture">{{ facture.ref }}</option>
+    </select>
+    <button class="btn btn-primary mt-2" (click)="onSelectFacture()">Charger la Facture</button>
+  </ng-template>
+  

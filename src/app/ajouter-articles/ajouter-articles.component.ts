@@ -24,12 +24,15 @@ export class AjouterArticlesComponent {
   selectedArticle:any;
   idArticle!:number ;
   nomArticle!:String ;
-  prixArticle!:number ;
+  prixAchatArticleHT!:number ;
   qteArticle!:number ;
-  prixVenteArticle!: number;
+  prixVenteArticleHT!: number;
+  prixVenteArticleTTC!: number;
+  TVA!: number;
   marqueArticle!: String;
   descArticle!: String;
-
+  pourcentagedeVente!:number;
+  maxPourcentagedeRemise!:number;
 
   dateFacture:String ;
   refFacture:String | undefined;
@@ -37,10 +40,37 @@ export class AjouterArticlesComponent {
   articles : any[] = [];
 
 
-  factureType:boolean=true;
+  factureType?:boolean;
+  
+  resetVariables(): void {
+    this.articleExiste = false;
+    this.selectedArticle = null;
+    this.idArticle = 0;
+    this.nomArticle = '';
+    this.prixAchatArticleHT = 0;
+    this.qteArticle = 0;
+    this.prixVenteArticleHT = 0;
+    this.prixVenteArticleTTC = 0;
+    this.TVA = 0;
+    this.marqueArticle = '';
+    this.descArticle = '';
+    this.pourcentagedeVente = 0;
+    this.maxPourcentagedeRemise = 0;
+  }
+  
   constructor(private sharedService : SharedService) {
     // Initialize dateFacture with today's date
     this.dateFacture = new Date().toISOString().split('T')[0];
+  }
+
+  calculerPrixVente(){
+    this.prixVenteArticleHT=(this.prixAchatArticleHT*(this.pourcentagedeVente/100)) +this.prixAchatArticleHT ;
+    const pTVA=this.prixAchatTVA()
+    this.prixVenteArticleTTC=(pTVA*(this.pourcentagedeVente/100)) +pTVA ;
+  }
+
+  prixAchatTVA(): number {
+    return (this.TVA / 100) * this.prixAchatArticleHT + this.prixAchatArticleHT;
   }
 
   ngOnInit(): void {
@@ -81,60 +111,78 @@ export class AjouterArticlesComponent {
 
   selectArticle(item:any)
   {
+  
     this.articleExiste=true;
     this.selectedArticle=item;
-
     this.nomArticle=item.nom;
     this.marqueArticle=item.marque;
     this.descArticle=item.description;
-    this.prixVenteArticle=item.prix;
-    
+    this.prixVenteArticleTTC=item.prix_vente_ttc;
+    this.prixVenteArticleHT=item.prix_vente_ht;
+    this.TVA=item.tva;
+    this.maxPourcentagedeRemise=item.max_remise;
+
   }
-  ajouterArticle()
-  {
-
-    if(this.articleExiste)
-      {
-        this.selectedArticle.prix_achat=this.prixArticle;
-        this.selectedArticle.description=this.descArticle;
-        this.selectedArticle.prix=this.prixVenteArticle;
-
-        const article: { id : number ;nom: String; prix_achat: number; quantite: number; prix: number; marque: String; description: String } = {
-          id : this.selectedArticle.id ,
-          nom: this.selectedArticle.nom,
-          prix: this.prixVenteArticle, // Set default value for price
+  
+  ajouterArticle() {
+    if (this.articleExiste) {
+      this.selectedArticle.prix_achat = this.prixAchatArticleHT;
+      this.selectedArticle.description = this.descArticle;
+      this.selectedArticle.prix_vente_ttc = this.prixVenteArticleTTC;
+      this.selectedArticle.prix_vente_ht = this.prixVenteArticleHT;
+      this.selectedArticle.tva = this.TVA;
+      this.selectedArticle.prix_achat_ht = this.prixAchatArticleHT;
+      this.selectedArticle.max_remise = this.maxPourcentagedeRemise;
+  
+      const article = {
+        id: this.selectedArticle.id,
+        nom: this.selectedArticle.nom,
+        prix_vente_ttc: this.prixVenteArticleTTC, // Updated field name
+        quantite: this.qteArticle,  // Set default value for quantity
+        prix_achat_ht: this.prixAchatArticleHT, // Updated field name
+        marque: this.marqueArticle || "",  // Set default value for brand (optional)
+        description: this.descArticle || "",   // Set default value for description (optional)
+        prix_vente_ht: this.prixVenteArticleHT, // New field
+        tva: this.TVA, // New field
+        max_remise: this.maxPourcentagedeRemise // New field
+      };
+      
+      console.log(article);
+      this.articles.push(article);
+      this.resetVariables();
+    } else {
+      const isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter cet article (cet article est nouveau)?");
+      if (isConfirmed) {
+        const article = {
+          nom: this.nomArticle,
+          prix_vente_ttc: this.prixVenteArticleTTC, // Updated field name
           quantite: this.qteArticle,  // Set default value for quantity
-          prix_achat:this.prixArticle , // Set default value for selling price
-          marque: this.selectedArticle.marque || "",  // Set default value for brand (optional)
-          description: this.selectedArticle.description || "",   // Set default value for description (optional)
+          prix_achat_ht: this.prixAchatArticleHT, // Updated field name
+          marque: this.marqueArticle || "",  // Set default value for brand (optional)
+          description: this.descArticle || "",   // Set default value for description (optional)
+          prix_vente_ht: this.prixVenteArticleHT, // New field
+          tva: this.TVA, // New field
+          max_remise: this.maxPourcentagedeRemise // New field
         };
         console.log(article);
         this.articles.push(article);
-      }else{
-        const isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce article (ce article est nouveau)?");
-        if (isConfirmed) {
-          const article: { nom: String; prix_achat: number; quantite: number; prix: number; marque: String; description: String } = {
-            nom: this.nomArticle,
-            prix: this.prixVenteArticle, // Set default value for price
-            quantite: this.qteArticle,  // Set default value for quantity
-            prix_achat:this.prixArticle , // Set default value for selling price
-            marque: this.marqueArticle || "",  // Set default value for brand (optional)
-            description: this.descArticle || "",   // Set default value for description (optional)
-          };
-          console.log(article);
-          this.articles.push(article);
-        } else {
-          console.log("Ajout du article annulé.");
-        }
+        this.resetVariables();
+      } else {
+        console.log("Ajout de l'article annulé.");
       }
-
+    }
   }
+
+  
+
 
   deleteProduct(index: number) {
     if (index > -1) {
       this.articles.splice(index, 1);
     }
   }
+
+
   onSubmit()
   {
     if(this.factureType)
@@ -169,7 +217,9 @@ export class AjouterArticlesComponent {
         }
       );
     });
-        
+       
+      this.articles=[];
+      
       }
       
   }
